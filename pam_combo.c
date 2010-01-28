@@ -25,7 +25,7 @@
  *************************************************************************
  */
 
-#include "config.h"
+
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -51,6 +51,8 @@
 #ifdef HAVE_LIBAUDIT
 #include <libaudit.h>
 #endif
+
+#define UNUSED __attribute__ ((unused))
 
 /*
  * here, we make definitions for the externally accessible functions
