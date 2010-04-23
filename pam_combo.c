@@ -652,8 +652,9 @@ login_access (pam_handle_t *pamh, struct login_info *item)
 /* match on time */
 	    if (!check_time_field(pamh, item, times)) /* the time doesn't apply */
 	    {
-		pam_syslog(pamh, LOG_DEBUG, "%s: line %d: time doesn't apply",
-			   item->config_file, lineno);
+		if (item->debug)
+		    pam_syslog(pamh, LOG_DEBUG, "%s: line %d: time doesn't apply",
+			       item->config_file, lineno);
 		continue;
 	    }
 
