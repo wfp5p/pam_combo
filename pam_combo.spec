@@ -1,6 +1,6 @@
 Name:           pam_combo
 Version:        0.1
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        A Pluggable Authentication Module combing access and time
 
 Group:          System Environment/Base
