@@ -1,6 +1,6 @@
 Name:           pam_combo
-Version:        0.1
-Release:        2%{?dist}
+Version:        0.2
+Release:        1%{?dist}
 Summary:        A Pluggable Authentication Module combing access and time
 
 Group:          System Environment/Base
@@ -48,6 +48,7 @@ rm -rf $RPM_BUILD_ROOT
 %doc NEWS README COPYING ChangeLog
 /%{_lib}/security/pam_combo.so
 %{_mandir}/man8/*
+%{_mandir}/man5/*
 %dir %{_secconfdir}
 %config(noreplace) %{_secconfdir}/combo.conf
 
