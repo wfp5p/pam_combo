@@ -1,161 +1,22 @@
-.\"     Title: pam_access
+'\" t
+.\"     Title: pam_combo
 .\"    Author: [see the "AUTHORS" section]
-.\" Generator: DocBook XSL Stylesheets v1.74.0 <http://docbook.sf.net/>
-.\"      Date: 06/16/2009
+.\" Generator: DocBook XSL Stylesheets v1.76.1 <http://docbook.sf.net/>
+.\"      Date: 05/13/2011
 .\"    Manual: Linux-PAM Manual
 .\"    Source: Linux-PAM Manual
 .\"  Language: English
 .\"
-.TH "PAM_ACCESS" "8" "06/16/2009" "Linux-PAM Manual" "Linux-PAM Manual"
+.TH "PAM_COMBO" "8" "05/13/2011" "Linux-PAM Manual" "Linux-PAM Manual"
 .\" -----------------------------------------------------------------
-.\" * (re)Define some macros
+.\" * Define some portability stuff
 .\" -----------------------------------------------------------------
 .\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-.\" toupper - uppercase a string (locale-aware)
+.\" http://bugs.debian.org/507673
+.\" http://lists.gnu.org/archive/html/groff/2009-02/msg00013.html
 .\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-.de toupper
-.tr aAbBcCdDeEfFgGhHiIjJkKlLmMnNoOpPqQrRsStTuUvVwWxXyYzZ
-\\$*
-.tr aabbccddeeffgghhiijjkkllmmnnooppqqrrssttuuvvwwxxyyzz
-..
-.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-.\" SH-xref - format a cross-reference to an SH section
-.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-.de SH-xref
-.ie n \{\
-.\}
-.toupper \\$*
-.el \{\
-\\$*
-.\}
-..
-.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-.\" SH - level-one heading that works better for non-TTY output
-.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-.de1 SH
-.\" put an extra blank line of space above the head in non-TTY output
-.if t \{\
-.sp 1
-.\}
-.sp \\n[PD]u
-.nr an-level 1
-.set-an-margin
-.nr an-prevailing-indent \\n[IN]
-.fi
-.in \\n[an-margin]u
-.ti 0
-.HTML-TAG ".NH \\n[an-level]"
-.it 1 an-trap
-.nr an-no-space-flag 1
-.nr an-break-flag 1
-\." make the size of the head bigger
-.ps +3
-.ft B
-.ne (2v + 1u)
-.ie n \{\
-.\" if n (TTY output), use uppercase
-.toupper \\$*
-.\}
-.el \{\
-.nr an-break-flag 0
-.\" if not n (not TTY), use normal case (not uppercase)
-\\$1
-.in \\n[an-margin]u
-.ti 0
-.\" if not n (not TTY), put a border/line under subheading
-.sp -.6
-\l'\n(.lu'
-.\}
-..
-.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-.\" SS - level-two heading that works better for non-TTY output
-.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-.de1 SS
-.sp \\n[PD]u
-.nr an-level 1
-.set-an-margin
-.nr an-prevailing-indent \\n[IN]
-.fi
-.in \\n[IN]u
-.ti \\n[SN]u
-.it 1 an-trap
-.nr an-no-space-flag 1
-.nr an-break-flag 1
-.ps \\n[PS-SS]u
-\." make the size of the head bigger
-.ps +2
-.ft B
-.ne (2v + 1u)
-.if \\n[.$] \&\\$*
-..
-.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-.\" BB/BE - put background/screen (filled box) around block of text
-.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-.de BB
-.if t \{\
-.sp -.5
-.br
-.in +2n
-.ll -2n
-.gcolor red
-.di BX
-.\}
-..
-.de EB
-.if t \{\
-.if "\\$2"adjust-for-leading-newline" \{\
-.sp -1
-.\}
-.br
-.di
-.in
-.ll
-.gcolor
-.nr BW \\n(.lu-\\n(.i
-.nr BH \\n(dn+.5v
-.ne \\n(BHu+.5v
-.ie "\\$2"adjust-for-leading-newline" \{\
-\M[\\$1]\h'1n'\v'+.5v'\D'P \\n(BWu 0 0 \\n(BHu -\\n(BWu 0 0 -\\n(BHu'\M[]
-.\}
-.el \{\
-\M[\\$1]\h'1n'\v'-.5v'\D'P \\n(BWu 0 0 \\n(BHu -\\n(BWu 0 0 -\\n(BHu'\M[]
-.\}
-.in 0
-.sp -.5v
-.nf
-.BX
-.in
-.sp .5v
-.fi
-.\}
-..
-.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-.\" BM/EM - put colored marker in margin next to block of text
-.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-.de BM
-.if t \{\
-.br
-.ll -2n
-.gcolor red
-.di BX
-.\}
-..
-.de EM
-.if t \{\
-.br
-.di
-.ll
-.gcolor
-.nr BH \\n(dn
-.ne \\n(BHu
-\M[\\$1]\D'P -.75n 0 0 \\n(BHu -(\\n[.i]u - \\n(INu - .75n) 0 0 -\\n(BHu'\M[]
-.in 0
-.nf
-.BX
-.in
-.fi
-.\}
-..
+.ie \n(.g .ds Aq \(aq
+.el       .ds Aq '
 .\" -----------------------------------------------------------------
 .\" * set default formatting
 .\" -----------------------------------------------------------------
@@ -166,28 +27,26 @@
 .\" -----------------------------------------------------------------
 .\" * MAIN CONTENT STARTS HERE *
 .\" -----------------------------------------------------------------
-.SH "Name"
-pam_access \- PAM module for logdaemon style login access control
-.SH "Synopsis"
-.fam C
-.HP \w'\fBpam_access\&.so\fR\ 'u
-\fBpam_access\&.so\fR [debug] [nodefgroup] [noaudit] [accessfile=\fIfile\fR] [fieldsep=\fIsep\fR] [listsep=\fIsep\fR]
-.fam
+.SH "NAME"
+pam_combo \- PAM module for to combine functionality of pam_access and pam_time
+.SH "SYNOPSIS"
+.HP \w'\fBpam_combo\&.so\fR\ 'u
+\fBpam_combo\&.so\fR [debug] [nodefgroup] [noaudit] [accessfile=\fIfile\fR] [fieldsep=\fIsep\fR] [listsep=\fIsep\fR]
 .SH "DESCRIPTION"
 .PP
-The pam_access PAM module is mainly for access management\&. It provides logdaemon style login access control based on login names, host or domain names, internet addresses or network numbers, or on terminal line names in case of non\-networked logins\&.
+The pam_combo PAM module is mainly for access management\&. It combines the logdaemon style login access control from pam_access with the time based control from pam_time\&.
 .PP
 By default rules for access management are taken from config file
-\FC/etc/security/access\&.conf\F[]
-if you don\'t specify another file\&.
+/etc/security/combo\&.conf
+if you don\*(Aqt specify another file\&.
 .PP
 If Linux PAM is compiled with audit support the module will report when it denies access based on origin (host or tty)\&.
 .SH "OPTIONS"
 .PP
-\fBaccessfile=\fR\fB\fI/path/to/access\&.conf\fR\fR
+\fBaccessfile=\fR\fB\fI/path/to/combo\&.conf\fR\fR
 .RS 4
 Indicate an alternative
-\FCaccess\&.conf\F[]
+combo\&.conf
 style configuration file to override the default\&. This can be useful when different services need different access lists\&.
 .RE
 .PP
@@ -204,18 +63,18 @@ Do not report logins from disallowed hosts and ttys to the audit subsystem\&.
 .PP
 \fBfieldsep=\fR\fB\fIseparators\fR\fR
 .RS 4
-This option modifies the field separator character that pam_access will recognize when parsing the access configuration file\&. For example:
+This option modifies the field separator character that pam_combo will recognize when parsing the combo configuration file\&. For example:
 \fBfieldsep=|\fR
-will cause the default `:\' character to be treated as part of a field value and `|\' becomes the field separator\&. Doing this may be useful in conjunction with a system that wants to use pam_access with X based applications, since the
+will cause the default `:\*(Aq character to be treated as part of a field value and `|\*(Aq becomes the field separator\&. Doing this may be useful in conjunction with a system that wants to use pam_combo with X based applications, since the
 \fBPAM_TTY\fR
-item is likely to be of the form "hostname:0" which includes a `:\' character in its value\&. But you should not need this\&.
+item is likely to be of the form "hostname:0" which includes a `:\*(Aq character in its value\&. But you should not need this\&.
 .RE
 .PP
 \fBlistsep=\fR\fB\fIseparators\fR\fR
 .RS 4
-This option modifies the list separator character that pam_access will recognize when parsing the access configuration file\&. For example:
+This option modifies the list separator character that pam_combo will recognize when parsing the combo configuration file\&. For example:
 \fBlistsep=,\fR
-will cause the default ` \' (space) and `\et\' (tab) characters to be treated as part of a list element value and `,\' becomes the only list element separator\&. Doing this may be useful on a system with group information obtained from a Windows domain, where the default built\-in groups "Domain Users", "Domain Admins" contain a space\&.
+will cause the default ` \*(Aq (space) and `\et\*(Aq (tab) characters to be treated as part of a list element value and `,\*(Aq becomes the only list element separator\&. Doing this may be useful on a system with group information obtained from a Windows domain, where the default built\-in groups "Domain Users", "Domain Admins" contain a space\&.
 .RE
 .PP
 \fBnodefgroup\fR
@@ -259,16 +118,18 @@ The user is not known to the system\&.
 .RE
 .SH "FILES"
 .PP
-\FC/etc/security/access\&.conf\F[]
+/etc/security/combo\&.conf
 .RS 4
 Default configuration file
 .RE
 .SH "SEE ALSO"
 .PP
 
-\fBaccess.conf\fR(5),
+\fBcombo.conf\fR(5),
+\fBpam_access\fR(8),
+\fBpam_time\fR(8),
 \fBpam.d\fR(5),
 \fBpam\fR(8)\&.
 .SH "AUTHORS"
 .PP
-The logdaemon style login access control scheme was designed and implemented by Wietse Venema\&. The pam_access PAM module was developed by Alexei Nogin <alexei@nogin\&.dnttm\&.ru>\&. The IPv6 support and the network(address) / netmask feature was developed and provided by Mike Becher <mike\&.becher@lrz\-muenchen\&.de>\&.
+The logdaemon style login access control scheme was designed and implemented by Wietse Venema\&. The pam_access PAM module was developed by Alexei Nogin <alexei@nogin\&.dnttm\&.ru>\&. pam_time was written by Andrew G\&. Morgan <morgan@kernel\&.org>\&. The IPv6 support and the network(address) / netmask feature was developed and provided by Mike Becher <mike\&.becher@lrz\-muenchen\&.de>\&. pam_combo was stuck together from pam_time and pam_access by Bill Pemberton <wfp5p@virginia\&.edu>

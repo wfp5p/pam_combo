@@ -1,13 +1,22 @@
 '\" t
-.\"     Title: access.conf
+.\"     Title: combo.conf
 .\"    Author: [see the "AUTHORS" section]
-.\" Generator: DocBook XSL Stylesheets v1.75.2 <http://docbook.sf.net/>
-.\"      Date: 12/09/2009
+.\" Generator: DocBook XSL Stylesheets v1.76.1 <http://docbook.sf.net/>
+.\"      Date: 05/13/2011
 .\"    Manual: Linux-PAM Manual
 .\"    Source: Linux-PAM Manual
 .\"  Language: English
 .\"
-.TH "ACCESS\&.CONF" "5" "12/09/2009" "Linux-PAM Manual" "Linux\-PAM Manual"
+.TH "COMBO\&.CONF" "5" "05/13/2011" "Linux-PAM Manual" "Linux\-PAM Manual"
+.\" -----------------------------------------------------------------
+.\" * Define some portability stuff
+.\" -----------------------------------------------------------------
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.\" http://bugs.debian.org/507673
+.\" http://lists.gnu.org/archive/html/groff/2009-02/msg00013.html
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.ie \n(.g .ds Aq \(aq
+.el       .ds Aq '
 .\" -----------------------------------------------------------------
 .\" * set default formatting
 .\" -----------------------------------------------------------------
@@ -19,27 +28,30 @@
 .\" * MAIN CONTENT STARTS HERE *
 .\" -----------------------------------------------------------------
 .SH "NAME"
-access.conf \- the login access control table file
+combo.conf \- the login access control table file
 .SH "DESCRIPTION"
 .PP
 The
-/etc/security/access\&.conf
+/etc/security/combo\&.conf
 file specifies (\fIuser/group\fR,
 \fIhost\fR), (\fIuser/group\fR,
 \fInetwork/netmask\fR) or (\fIuser/group\fR,
-\fItty\fR) combinations for which a login will be either accepted or refused\&.
+\fItty\fR), and time combinations for which a login will be either accepted or refused\&.
 .PP
 When someone logs in, the file
-access\&.conf
+combo\&.conf
 is scanned for the first entry that matches the (\fIuser/group\fR,
+\fItime\fR,
 \fIhost\fR) or (\fIuser/group\fR,
+\fItime\fR,
 \fInetwork/netmask\fR) combination, or, in case of non\-networked logins, the first entry that matches the (\fIuser/group\fR,
+\fItime\fR,
 \fItty\fR) combination\&. The permissions field of that table entry determines whether the login will be accepted or refused\&.
 .PP
-Each line of the login access control table has three fields separated by a ":" character (colon):
+Each line of the login combo control table has four fields separated by a ":" character (colon):
 .PP
 
-\fIpermission\fR:\fIusers/groups\fR:\fIorigins\fR
+\fIpermission\fR:\fIusers/groups\fR:\fItimes\fR:\fIorigins\fR
 .PP
 The first field, the
 \fIpermission\fR
@@ -53,6 +65,14 @@ field, should be a list of one or more login names, group names, or
 \fI(group)\fR\&.
 .PP
 The third field, the
+\fItimes\fR
+field, is a time specification as such as is used by the pam_time module\&. This field is used to indicatate the times at which this rule applies\&. The format here is a logic list of day/time\-range entries\&. The days are specified by a sequence of two character entries, MoTuSa for example is Monday Tuesday and Saturday\&. Note that repeated days are unset MoMo = no day, and MoWk = all weekdays bar Monday\&. The two character combinations accepted are Mo Tu We Th Fr Sa Su Wk Wd Al, the last two being week\-end days and all 7 days of the week respectively\&. As a final example, AlFr means all days except Friday\&.
+.PP
+Each day/time\-range can be prefixed with a \*(Aq!\*(Aq to indicate "anything but"\&. The time\-range part is two 24\-hour times HHMM, separated by a hyphen, indicating the start and finish time (if the finish time is smaller than the start time it is deemed to apply on the following day)\&. The word
+\fIALL\fR
+can used in this field to mean all times\&.
+.PP
+The fourth field, the
 \fIorigins\fR
 field, should be a list of one or more tty names (for non\-networked logins), host names, domain names (begin with "\&."), host addresses, internet network numbers (end with "\&."), internet network addresses with network mask (where network mask can be a decimal number or an internet address also),
 \fIALL\fR
@@ -82,105 +102,36 @@ The "\fI#\fR" character at start of line (no space at front) can be used to mark
 .SH "EXAMPLES"
 .PP
 These are some example lines which might be specified in
-/etc/security/access\&.conf\&.
+/etc/security/combo\&.conf\&.
 .PP
 User
 \fIroot\fR
-should be allowed to get access via
-\fIcron\fR, X11 terminal
-\fI:0\fR,
-\fItty1\fR, \&.\&.\&.,
-\fItty5\fR,
-\fItty6\fR\&.
+should be allowed to get access from hosts which own the IPv4 addresses during weekdays between 8am and 5pm\&. This does not mean that the connection have to be a IPv4 one, a IPv6 connection from a host with one of this IPv4 addresses does work, too\&.
 .PP
-+ : root : crond :0 tty1 tty2 tty3 tty4 tty5 tty6
++ : root : Wk0800\-1700 : 192\&.168\&.200\&.1 192\&.168\&.200\&.4 192\&.168\&.200\&.9
 .PP
 User
 \fIroot\fR
-should be allowed to get access from hosts which own the IPv4 addresses\&. This does not mean that the connection have to be a IPv4 one, a IPv6 connection from a host with one of this IPv4 addresses does work, too\&.
-.PP
-+ : root : 192\&.168\&.200\&.1 192\&.168\&.200\&.4 192\&.168\&.200\&.9
-.PP
-+ : root : 127\&.0\&.0\&.1
-.PP
-User
-\fIroot\fR
-should get access from network
-192\&.168\&.201\&.
-where the term will be evaluated by string matching\&. But it might be better to use network/netmask instead\&. The same meaning of
-192\&.168\&.201\&.
-is
-\fI192\&.168\&.201\&.0/24\fR
-or
-\fI192\&.168\&.201\&.0/255\&.255\&.255\&.0\fR\&.
-.PP
-+ : root : 192\&.168\&.201\&.
-.PP
-User
-\fIroot\fR
-should be able to have access from hosts
-\fIfoo1\&.bar\&.org\fR
-and
-\fIfoo2\&.bar\&.org\fR
-(uses string matching also)\&.
-.PP
-+ : root : foo1\&.bar\&.org foo2\&.bar\&.org
-.PP
-User
-\fIroot\fR
-should be able to have access from domain
+should be able to have access at any time from domain
 \fIfoo\&.bar\&.org\fR
 (uses string matching also)\&.
 .PP
-+ : root : \&.foo\&.bar\&.org
++ : root : ALL : \&.foo\&.bar\&.org
 .PP
 User
 \fIroot\fR
 should be denied to get access from all other sources\&.
 .PP
-\- : root : ALL
-.PP
-User
-\fIfoo\fR
-and members of netgroup
-\fIadmins\fR
-should be allowed to get access from all sources\&. This will only work if netgroup service is available\&.
-.PP
-+ : @admins foo : ALL
-.PP
-User
-\fIjohn\fR
-and
-\fIfoo\fR
-should get access from IPv6 host address\&.
-.PP
-+ : john foo : 2001:db8:0:101::1
-.PP
-User
-\fIjohn\fR
-should get access from IPv6 net/mask\&.
-.PP
-+ : john : 2001:db8:0:101::/64
-.PP
-Disallow console logins to all but the shutdown, sync and all other accounts, which are a member of the wheel group\&.
-.PP
-\-:ALL EXCEPT (wheel) shutdown sync:LOCAL
-.PP
-All other users should be denied to get access from all sources\&.
-.PP
-\- : ALL : ALL
+\- : root : ALL : ALL
 .SH "SEE ALSO"
 .PP
 
-\fBpam_access\fR(8),
+\fBpam_combo\fR(8),
 \fBpam.d\fR(5),
 \fBpam\fR(8)
 .SH "AUTHORS"
 .PP
-Original
-\fBlogin.access\fR(5)
-manual was provided by Guido van Rooij which was renamed to
+
+\fBcombo.conf\fR(5)
+is a slightly modifed version of
 \fBaccess.conf\fR(5)
-to reflect relation to default config file\&.
-.PP
-Network address / netmask description and example text was introduced by Mike Becher <mike\&.becher@lrz\-muenchen\&.de>\&.
