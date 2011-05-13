@@ -3,7 +3,7 @@ pam_combo_la_LDFLAGS		= -avoid-version -module
 pam_combo_la_LIBADD		= @LTLIBOBJS@
 pam_combo_la_SOURCES		= pam_combo.c
 libdir				= @PAMDIR@
-man_MANS			= pam_combo.8
+man_MANS			= pam_combo.8 combo.conf.5
 AM_CFLAGS			= -Wall  -DPAM_COMBO_CONFIG=\"/etc/security/combo.conf\"
 
 LIBTOOL_DEPS			= @LIBTOOL_DEPS@
