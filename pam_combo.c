@@ -1,6 +1,18 @@
 /* pam_combo module */
 
+
 /*
+ * This is a pam_access.c with some time related features added in.
+ *
+ * There's probably some way in pam to accomplish this without creating a
+ * combo module, but I was too stupid to work out how to do it so I
+ * created this.
+ *
+ * pam_combo was mashed together from pam_access.c and pam_time.c by
+ * Bill Pemberton <wfp5p@virginia.edu>
+ *
+ * Copyright info from pam_access.c starts here:
+ *
  * Written by Alexei Nogin <alexei@nogin.dnttm.ru> 1997/06/15
  * (I took login_access from logdaemon-5.6 and converted it to PAM
  * using parts of pam_time code.)
@@ -119,7 +131,7 @@ struct login_info {
 };
 
 
-/* routines from pam_time */
+/* the following routines are from from pam_time */
 
 
 static struct day {
@@ -688,7 +700,7 @@ login_access (pam_handle_t *pamh, struct login_info *item)
     if (!item->noaudit && line[0] == '-' && (match == YES || (match == ALL &&
 	nonall_match == YES))) {
 	pam_modutil_audit_write(pamh, AUDIT_ANOM_LOGIN_LOCATION,
-	    "pam_access", 0);
+	    "pam_combo", 0);
     }
 #endif
     return (match == NO || (line[0] == '+'));
@@ -764,7 +776,7 @@ netgroup_match (pam_handle_t *pamh, const char *netgroup,
   retval = innetgr (netgroup, machine, user, mydomain);
 #else
   retval = 0;
-  pam_syslog (pamh, LOG_ERR, "pam_access does not have netgroup support");
+  pam_syslog (pamh, LOG_ERR, "pam_combo does not have netgroup support");
 #endif
   if (debug == YES)
     pam_syslog (pamh, LOG_DEBUG,
@@ -1209,8 +1221,8 @@ pam_sm_chauthtok(pam_handle_t *pamh, int flags,
 
 /* static module data */
 
-struct pam_module _pam_access_modstruct = {
-    "pam_access",
+struct pam_module _pam_combo_modstruct = {
+    "pam_combo",
     pam_sm_authenticate,
     pam_sm_setcred,
     pam_sm_acct_mgmt,
