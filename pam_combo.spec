@@ -1,10 +1,10 @@
 Name:           pam_combo
 Version:        0.2
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        A Pluggable Authentication Module combing access and time
 
 Group:          System Environment/Base
-License:        BSD
+License:        WTFPL
 Source0:	pam_combo-%{version}.tar.gz
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
@@ -26,7 +26,7 @@ pam_access with pam_time.
 %setup -q
 
 libtoolize -f
-autoreconf
+autoreconf --install
 
 %build
 %configure --libdir=/%{_lib} \
