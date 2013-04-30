@@ -1,7 +1,7 @@
 Name:           pam_combo
 Version:        0.2
-Release:        2%{?dist}
-Summary:        A Pluggable Authentication Module combing access and time
+Release:        3%{?dist}
+Summary:        A Pluggable Authentication Module combining access and time
 
 Group:          System Environment/Base
 License:        WTFPL
@@ -42,7 +42,6 @@ rm $RPM_BUILD_ROOT/%{_lib}/security/pam_combo.la
 %clean
 rm -rf $RPM_BUILD_ROOT
 
-
 %files
 %defattr(-,root,root,-)
 %doc NEWS README COPYING ChangeLog
@@ -52,3 +51,7 @@ rm -rf $RPM_BUILD_ROOT
 %dir %{_secconfdir}
 %config(noreplace) %{_secconfdir}/combo.conf
 
+%changelog
+
+* Tue Apr 30 2013 Bill Pemberton <wfp5p@virginia.edu> - 0.2-3
+- fix spelling in summary
