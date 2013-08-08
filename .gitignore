@@ -19,3 +19,9 @@ manpage.links
 manpage.log
 manpage.refs
 m4/
+INSTALL
+config.guess
+config.sub
+depcomp
+install-sh
+missing
