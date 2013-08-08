@@ -1,11 +1,10 @@
-
-AC_INIT([pam_combo],[0.1],[wfp5p@virginia.edu])
+AC_INIT([pam_combo],[0.2],[wfp5p@virginia.edu])
 AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_SRCDIR([pam_combo.c])
 AC_CANONICAL_TARGET([])
 AM_DISABLE_STATIC
 AC_CONFIG_MACRO_DIR([m4])
-AM_INIT_AUTOMAKE(pam_combo, 0.2)
+AM_INIT_AUTOMAKE
 AM_PROG_LIBTOOL
 dnl AC_SUBST(LIBTOOL_DEPS)
 
