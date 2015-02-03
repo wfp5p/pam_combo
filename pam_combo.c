@@ -989,8 +989,8 @@ network_netmask_match (pam_handle_t *pamh,
     int addr_type;
 
     if (debug)
-    pam_syslog (pamh, LOG_DEBUG,
-		"network_netmask_match: tok=%s, item=%s", tok, string);
+	    pam_syslog (pamh, LOG_DEBUG,
+			"network_netmask_match: tok=%s, item=%s", tok, string);
     /* OK, check if tok is of type addr/mask */
     if ((netmask_ptr = strchr(tok, '/')) != NULL)
       {
